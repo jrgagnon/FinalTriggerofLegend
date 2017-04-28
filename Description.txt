@@ -1,0 +1,55 @@
+1. Battle System of Chrono Trigger
+2. Inventory and Character roster of Final Fantasy
+3. Dungeon Exploration of original Legend of Zelda
+
+GOAL
+Make a game that doesn't limit the things you use by allowing all items to be used at any time
+makes the game free to be played the way the player wants
+
+Dungeons:
+- Layed out like original Legend of Zelda
+	- Move from room to room
+	- Find keys
+	- Collect items
+	- Solve Puzzles
+	- Encounter a boss to complete the dungeons
+		- Doing so will reward you with a unique items
+		- Possibly a party member who was captured by them
+- Conatin Unique Items that will be useful later but not needed
+	- May just be unique weapons
+	- But could include items like in Zelda that allow you to get to unreachable areas
+		- This would allow for backtracking and longer playtime
+- Like Megaman, althoght order independant dungeons, there may be an optimal route
+- Some Dungeons contain new party members
+	
+Diverse Party Members:
+- Unique skills on all like FF6
+	- Each member is different to allow for unique combinations
+- Large Roster of Characters somewhere between FF7 and FF6 (8-14)
+- Like Chrono Trigger possibly have combos with certain characters
+	
+Inventory:
+- Weapon and Armor Drops scale
+	- To fit with the order independant dungeons
+Equipables:
+- Weapon: Swords, Guns?, Staves
+- Armor:
+- Accessory: Rings and Other things
+	
+Battle System:
+- Enemies appear in world
+- All Enemies scale
+	- So when bactracking you still gain relevant XP
+	- To fit with the order independant dungeons
+- Walking into them starts battle	
+ 	In Battle:
+	- Your proximity affects what abilitys will connect with which enemies
+	- Smart attack selection and setup is key
+	
+Towns:
+- Linear Like in Shovel Knight
+- Have NPC Quest Givers
+- Shops
+	- Shop items level dependant
+	- Each shop will have the same items but they scale with level
+	
