@@ -1,5 +1,4 @@
 #include "ftol_sprite.h"
-#include "ftol_SDL.h"
 
 ftol_sprite::ftol_sprite(SDL_Renderer* passed_renderer, std::string FilePath, int x, int y, int w, int h, int b)
 {
@@ -17,6 +16,12 @@ ftol_sprite::ftol_sprite(SDL_Renderer* passed_renderer, std::string FilePath, in
   rect.y = y;
   rect.w = w;
   rect.h = h;
+
+  //Initialize the rect use when drawing to screen
+  drawRect.x = 0;
+  drawRect.y = 0;
+  drawRect.w = w;
+  drawRect.h = h;
 }
 
 SDL_Texture* ftol_sprite::loadTexture(std::string path)
@@ -51,14 +56,17 @@ ftol_sprite::~ftol_sprite(void)
   SDL_DestroyTexture(texture);
 }
 
-void ftol_sprite::Draw()
+void ftol_sprite::Draw(SDL_Rect camera)
 {
   if(backround == 0) //Sprite is not a backround
   {
-    SDL_RenderCopy(renderer, texture, NULL, &rect);
+    drawRect.x = rect.x - camera.x;
+    drawRect.y = rect.y - camera.y;
+
+    SDL_RenderCopy(renderer, texture, NULL, &drawRect);
   } else //Sprite is backround
   {
-    SDL_RenderCopy(renderer, texture, NULL, NULL);
+    SDL_RenderCopy(renderer, texture, &camera, NULL);
   }
 }
 
@@ -86,4 +94,14 @@ int ftol_sprite::GetX(void)
 int ftol_sprite::GetY(void)
 {
   return rect.y;
+}
+
+int ftol_sprite::GetW(void)
+{
+  return rect.w;
+}
+
+int ftol_sprite::GetH(void)
+{
+  return rect.h;
 }

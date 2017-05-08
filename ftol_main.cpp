@@ -1,4 +1,3 @@
-#include "ftol_SDL.h"
 #include "ftol_main.h"
 
 //ftol_main constructor
@@ -7,6 +6,13 @@ ftol_main::ftol_main(int width, int height)
   quit = false;
   ScreenWidth = width;
   ScreenHeight = height;
+
+  MoveUp = false;
+  MoveDown = false;
+  MoveLeft = false;
+  MoveRight = false;
+
+  timeCheck = SDL_GetTicks();
 
   //Initialize and create the game window
   window = NULL;
@@ -34,10 +40,21 @@ ftol_main::ftol_main(int width, int height)
   }
 
   grass = NULL;
-  grass = new ftol_sprite(renderer, "Data/grass.bmp", 0, 0, ScreenWidth, ScreenHeight, 1);
+  grass = new ftol_sprite(renderer, "Data/checker.png", 0, 0, 1024, 1024, 1);
+
+  townTiles = NULL;
+  townTiles = new ftol_tileset(4, 3);
+
+  //townMap = NULL;
+  //townMap = new ftol_map(16, 12, 192, "Data/lazy.map", renderer, "Data/tiles.png");
 
   player = NULL;
-  player = new ftol_sprite(renderer, "Data/celes.png", 250, 250, 48, 72, 0);
+  player = new ftol_sprite(renderer, "Data/celes.png", 5, 5, 36, 54, 0);
+
+  camera.x = 0;
+  camera.y = 0;
+  camera.w = ScreenWidth;
+  camera.h = ScreenHeight;
   //Initialize the event trigger used to see various actions of the window
   //Like close
   mainEvent = new SDL_Event();
@@ -63,27 +80,133 @@ void ftol_main::keyPress(void)
       switch(mainEvent->key.keysym.sym)
       {
         case SDLK_w:
-          player->SetY(player->GetY() - STRIDE_LENGTH);
+          MoveUp = true;
           break;
 
         case SDLK_s:
-          player->SetY(player->GetY() + STRIDE_LENGTH);
+          MoveDown = true;
           break;
 
         case SDLK_a:
-          player->SetX(player->GetX() - STRIDE_LENGTH);
+          MoveLeft = true;
           break;
 
         case SDLK_d:
-          player->SetX(player->GetX() + STRIDE_LENGTH);
+          MoveRight = true;
           break;
 
         default:
           break;
       }
       break;
+
+    case SDL_KEYUP:
+
+      switch(mainEvent->key.keysym.sym)
+      {
+        case SDLK_w:
+          MoveUp = false;
+          break;
+
+        case SDLK_s:
+          MoveDown = false;
+          break;
+
+        case SDLK_a:
+          MoveLeft = false;
+          break;
+
+        case SDLK_d:
+          MoveRight = false;
+          break;
+
+        default:
+          break;
+        }
+          break;
     default:
       break;
+  }
+
+  if (timeCheck+10 < SDL_GetTicks())
+  {
+    int tempY = 0;
+    int tempX = 0;
+
+    if (MoveUp)
+    {
+      tempY = player->GetY() - STRIDE_LENGTH;
+
+      if(tempY < 0)
+      {
+        tempY = 0;
+      }
+
+      player->SetY(tempY);
+    }
+
+    if (MoveDown)
+    {
+      tempY = player->GetY() + STRIDE_LENGTH;
+
+      if(tempY > LEVEL_HEIGHT - player->GetH())
+      {
+        tempY = LEVEL_HEIGHT - player->GetH();
+      }
+
+      player->SetY(tempY);
+    }
+
+    if (MoveLeft)
+    {
+      tempX = player->GetX() - STRIDE_LENGTH;
+
+      if(tempX < 0)
+      {
+        tempX = 0;
+      }
+
+      player->SetX(tempX);
+    }
+    
+    if (MoveRight)
+    {
+      tempX = player->GetX() + STRIDE_LENGTH;
+
+      if(tempX > LEVEL_WIDTH - player->GetW())
+      {
+        tempX = LEVEL_WIDTH - player->GetW();
+      }
+
+      player->SetX(tempX);
+    }
+
+    timeCheck = SDL_GetTicks();
+  }
+}
+
+void ftol_main::updateCamera(void)
+{
+  //Center the camera over the player
+  camera.x = player->GetX() - ScreenWidth / 2;
+  camera.y = player->GetY() - ScreenHeight / 2;
+
+  //Keep the camera in bounds
+  if( camera.x < 0 )
+  {
+    camera.x = 0;
+  }
+  if( camera.y < 0 )
+  {
+    camera.y = 0;
+  }
+  if( camera.x > LEVEL_WIDTH - camera.w )
+  {
+    camera.x = LEVEL_WIDTH - camera.w;
+  }
+  if( camera.y > LEVEL_HEIGHT - camera.h )
+  {
+    camera.y = LEVEL_HEIGHT - camera.h;
   }
 }
 
@@ -95,10 +218,12 @@ void ftol_main::GameLoop(void)
     SDL_PollEvent(mainEvent);
     SDL_RenderClear(renderer);
 
-    grass->Draw();
-    player->Draw();
+    //townMap->DrawMap(camera);
+    grass->Draw(camera);
+    player->Draw(camera);
 
     keyPress();
+    updateCamera();
 
     SDL_RenderPresent(renderer);
   }

@@ -1,5 +1,5 @@
 CC       = c++
-OBJS = ftol.cpp ftol_sprite.cpp ftol_main.cpp
+OBJS = ftol_sprite.cpp ftol_tileset.cpp ftol_tile.cpp ftol_main.cpp ftol.cpp
 
 INCLUDE_PATHS = -IC:\mingw_dev_lib\include\SDL2
 LIBRARY_PATHS = -LC:\mingw_dev_lib\lib
